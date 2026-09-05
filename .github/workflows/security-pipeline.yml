@@ -30,10 +30,10 @@ jobs:
       - name: Build da Imagem Docker
         run: docker build -t secops-demo-api:latest ./app
 
-      - name: Varredura de Vulnerabilidades com Trivy
-        uses: aquasecurity/trivy-action@d23f380ed5201111e1f72ef9198651c6eef2fa9b
-        with:
-          image-ref: 'secops-demo-api:latest'
-          format: 'table'
-          exit-code: '0'
-          severity: 'CRITICAL,HIGH'
+      - name: Executar Varredura Trivy (CLI Oficial)
+        run: |
+          sudo apt-get update && sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+          echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update && sudo apt-get install -y trivy
+          trivy image --exit-code 0 --severity CRITICAL,HIGH secops-demo-api:latest
