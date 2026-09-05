@@ -1,0 +1,42 @@
+name: DevSecOps Security Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  sast-scan:
+    name: Análise Estática de Código (SAST)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Executar Semgrep (SAST)
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/default
+
+  container-scan:
+    name: Varredura de Imagem Docker (Trivy)
+    runs-on: ubuntu-latest
+    needs: sast-scan
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Build da Imagem Docker
+        run: |
+          docker build -t secops-demo-api:latest ./app
+
+      - name: Varredura de Vulnerabilidades com Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: 'secops-demo-api:latest'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'
