@@ -33,12 +33,7 @@ jobs:
         run: |
           docker build -t secops-demo-api:latest ./app
 
-      - name: Varredura de Vulnerabilidades com Trivy
-        uses: aquasecurity/trivy-action@v0.28.0
-        with:
-          image-ref: 'secops-demo-api:latest'
-          format: 'table'
-          exit-code: '0'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+      - name: Instalar e Executar Trivy (CLI)
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+          trivy image --exit-code 0 --severity CRITICAL,HIGH secops-demo-api:latest
