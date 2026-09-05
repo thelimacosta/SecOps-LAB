@@ -39,3 +39,27 @@ jobs:
           image-ref: 'secops-demo-api:latest'
           exit-code: '1'
           severity: ${{ inputs.severity || 'CRITICAL,HIGH' }}
+
+  publish:
+    name: Publicar Imagem no GHCR
+    runs-on: ubuntu-latest
+    needs: container-scan
+    if: github.event_name == 'push'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+      - name: Login no GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build e Push da Imagem
+        uses: docker/build-push-action@v6
+        with:
+          context: ./app
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/secops-demo-api:latest
