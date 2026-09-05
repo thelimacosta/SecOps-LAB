@@ -34,7 +34,7 @@ jobs:
           docker build -t secops-demo-api:latest ./app
 
       - name: Varredura de Vulnerabilidades com Trivy
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
           image-ref: 'secops-demo-api:latest'
           format: 'table'
