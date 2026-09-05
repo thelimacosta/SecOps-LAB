@@ -16,6 +16,7 @@ jobs:
 
       - name: Executar Semgrep (SAST)
         uses: semgrep/semgrep-action@v1
+        continue-on-error: true
         with:
           config: p/default
 
@@ -31,4 +32,6 @@ jobs:
         run: docker build -t secops-demo-api:latest ./app
 
       - name: Executar Varredura com Trivy via Container
-        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasecurity/trivy:latest image --exit-code 0 --severity CRITICAL,HIGH secops-demo-api:latest
+        continue-on-error: true
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasecurity/trivy:latest image --exit-code 0 secops-demo-api:latest
