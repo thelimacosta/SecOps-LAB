@@ -30,11 +30,5 @@ jobs:
       - name: Build da Imagem Docker
         run: docker build -t secops-demo-api:latest ./app
 
-      - name: Executar Trivy via Docker Container
-        run: |
-          docker run --rm \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            aquasecurity/trivy:latest image \
-            --exit-code 0 \
-            --severity CRITICAL,HIGH \
-            secops-demo-api:latest
+      - name: Executar Varredura com Trivy via Container
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasecurity/trivy:latest image --exit-code 0 --severity CRITICAL,HIGH secops-demo-api:latest
