@@ -65,7 +65,7 @@ SecOps-LAB/
 │   ├── app.py
 │   ├── requirements.txt
 │   └── Dockerfile
-├── 
+├── Actions.png
 └── README.md
 ```
 
