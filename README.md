@@ -60,18 +60,16 @@ Actions → DevSecOps Security Pipeline → Run workflow → escolha a severidad
 ```
 SecOps-LAB/
 ├── .github/workflows/
-│   └── security-pipeline.yml
-├── app/
-│   ├── app.py
-│   ├── requirements.txt
-│   └── Dockerfile
-├── Actions.png
-└── README.md
+│   └── security-pipeline.yml   # pipeline completo (SAST + SCA + DAST + publish)
+└── app/
+    ├── app.py                  # API Flask
+    ├── requirements.txt
+    └── Dockerfile
 ```
 
 ## 🖼️ Resultado
 
-![Pipeline passando com todos os jobs verdes](./pipeline-verde.png)
+![Pipeline passando com todos os jobs verdes](./Actions.png)
 
 Pipeline passando com todas as camadas verdes: SAST sem findings, Trivy com zero vulnerabilidades `HIGH`/`CRITICAL`, e ZAP Baseline sem `FAIL-NEW`.
 
